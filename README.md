@@ -1,4 +1,4 @@
-# ⚡ Robinson Moncada - Software Engineer AI/Blockchain Portafolio
+# ⚡ Robinson Moncada - Software Engineer AI/Blockchain Portfolio
 
 Professional portfolio built with Streamlit showcasing expertise in Machine Learning, Deep Learning, AI Generativa, MCP Servers, Agentic Engineering, Computación Cuántica, DevOps, and Blockchain.
 

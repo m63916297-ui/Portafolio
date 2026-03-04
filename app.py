@@ -1,413 +1,398 @@
 import streamlit as st
-from datetime import datetime
 
 st.set_page_config(
     page_title="Robinson Moncada | Software Engineer AI/Blockchain",
-    page_icon="🤖",
+    page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-CUSTOM_CSS = f"""
+CUSTOM_CSS = """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    
-    * {
-        font-family: 'Inter', sans-serif !important;
-        box-sizing: border-box;
-    }
-    
-    html, body, .stApp {
-        background: #0a0a0f !important;
-        color: #f8fafc;
-    }
-    
-    .main {
-        background: linear-gradient(135deg, #0a0a0f 0%, #0c0c14 50%, #0f0f1a 100%);
-        min-height: 100vh;
-        position: relative;
-    }
-    
-    .main::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: 
-            radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
-            radial-gradient(ellipse 60% 40% at 100% 0%, rgba(139, 92, 246, 0.1), transparent),
-            radial-gradient(ellipse 50% 30% at 0% 100%, rgba(16, 185, 129, 0.08), transparent);
-        pointer-events: none;
-        z-index: 0;
-    }
-    
-    .stApp > div {
-        position: relative;
-        z-index: 1;
-    }
-    
-    /* Animations */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes gradient-shift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-    
-    /* Hero Section */
-    .hero-section {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(16, 185, 129, 0.08) 100%);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(148, 163, 184, 0.1);
-        border-radius: 24px;
-        padding: 3rem;
-        margin-bottom: 2rem;
-        position: relative;
-        overflow: hidden;
-        animation: fadeInUp 0.5s ease-out forwards;
-    }
-    
-    .hero-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #818cf8, #34d399, transparent);
-        background-size: 200% 100%;
-        animation: gradient-shift 3s ease infinite;
-    }
-    
-    .hero-title {
-        font-size: clamp(2.5rem, 5vw, 4rem);
-        font-weight: 800;
-        background: linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #34d399 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 0.5rem;
-        letter-spacing: -0.02em;
-    }
-    
-    .hero-subtitle {
-        font-size: clamp(1rem, 2vw, 1.35rem);
-        color: #94a3b8;
-        margin-bottom: 1rem;
-        font-weight: 400;
-    }
-    
-    .hero-location {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #34d399;
-        font-size: 0.95rem;
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        background: rgba(16, 185, 129, 0.1);
-        border-radius: 9999px;
-        border: 1px solid rgba(16, 185, 129, 0.2);
-    }
-    
-    /* Section Titles */
-    .section-title {
-        font-size: clamp(1.5rem, 3vw, 2rem);
-        font-weight: 700;
-        color: #f8fafc;
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 2px solid transparent;
-        position: relative;
-        display: inline-block;
-    }
-    
-    .section-title::before {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 60px;
-        height: 2px;
-        background: linear-gradient(90deg, #818cf8, #34d399);
-        border-radius: 9999px;
-    }
-    
-    /* Service Cards */
-    .service-card {
-        background: rgba(30, 41, 59, 0.6);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(148, 163, 184, 0.1);
-        border-radius: 16px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .service-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #6366f1, #10b981);
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-    }
-    
-    .service-card:hover {
-        transform: translateY(-4px);
-        background: rgba(49, 46, 129, 0.3);
-        border-color: rgba(139, 92, 246, 0.4);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 0 40px rgba(99, 102, 241, 0.3);
-    }
-    
-    .service-card:hover::before {
-        transform: scaleX(1);
-    }
-    
-    .service-icon {
-        font-size: 2.5rem;
-        margin-bottom: 0.75rem;
-        display: inline-block;
-        transition: transform 0.3s ease;
-    }
-    
-    .service-card:hover .service-icon {
-        transform: scale(1.15) rotate(5deg);
-    }
-    
-    .service-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #f8fafc;
-        margin-bottom: 0.5rem;
-    }
-    
-    .service-description {
-        color: #94a3b8;
-        font-size: 0.95rem;
-        line-height: 1.7;
-    }
-    
-    /* Tech Tags */
-    .tech-tag {
-        display: inline-flex;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.1));
-        color: #a5b4fc;
-        padding: 0.25rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 500;
-        margin: 0.25rem;
-        border: 1px solid rgba(99, 102, 241, 0.2);
-        transition: all 0.15s ease;
-    }
-    
-    .tech-tag:hover {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.2));
-        border-color: #818cf8;
-        transform: translateY(-2px);
-    }
-    
-    /* Experience Cards */
-    .experience-card {
-        background: rgba(30, 41, 59, 0.6);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(148, 163, 184, 0.1);
-        border-left: 4px solid #6366f1;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        border-radius: 0 12px 12px 0;
-        transition: all 0.3s ease;
-    }
-    
-    .experience-card:hover {
-        background: rgba(49, 46, 129, 0.3);
-        border-left-color: #10b981;
-        transform: translateX(8px);
-    }
-    
-    .experience-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #f8fafc;
-    }
-    
-    .experience-company {
-        color: #818cf8;
-        font-weight: 500;
-    }
-    
-    .experience-period {
-        color: #64748b;
-        font-size: 0.85rem;
-        margin-bottom: 0.75rem;
-        font-family: monospace;
-    }
-    
-    .experience-description {
-        color: #94a3b8;
-        line-height: 1.7;
-    }
-    
-    /* Industry Badges */
-    .industry-badge {
-        display: inline-flex;
-        background: rgba(99, 102, 241, 0.1);
-        color: #a5b4fc;
-        padding: 0.25rem 0.75rem;
-        border-radius: 8px;
-        font-size: 0.8rem;
-        font-weight: 500;
-        margin-right: 0.5rem;
-        border: 1px solid rgba(99, 102, 241, 0.15);
-    }
-    
-    /* Prose Cards */
-    .prose-card {
-        background: rgba(30, 41, 59, 0.6);
-        border-radius: 16px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        border: 1px solid rgba(148, 163, 184, 0.1);
-    }
-    
-    .prose-card h4 {
-        color: #f8fafc;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        font-size: 1.1rem;
-    }
-    
-    .prose-card p {
-        color: #94a3b8;
-        line-height: 1.8;
-    }
-    
-    .prose-card strong {
-        color: #a5b4fc;
-    }
-    
-    /* Contact Cards */
-    .contact-card {
-        background: rgba(30, 41, 59, 0.6);
-        border-radius: 16px;
-        padding: 2rem;
-        text-align: center;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid rgba(148, 163, 184, 0.1);
-    }
-    
-    .contact-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #6366f1, #10b981, #f59e0b);
-    }
-    
-    .contact-card:hover {
-        transform: translateY(-4px);
-        border-color: rgba(139, 92, 246, 0.4);
-    }
-    
-    .contact-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-    }
-    
-    .contact-label {
-        color: #f8fafc;
-        font-weight: 600;
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .contact-value {
-        color: #94a3b8;
-        font-size: 0.95rem;
-    }
-    
-    /* Footer */
-    .footer {
-        text-align: center;
-        padding: 2rem 0;
-        margin-top: 2rem;
-        border-top: 1px solid rgba(148, 163, 184, 0.1);
-    }
-    
-    .footer-text {
-        color: #64748b;
-        font-size: 0.9rem;
-    }
-    
-    .footer-brand {
-        color: #818cf8;
-        font-weight: 600;
-    }
-    
-    /* Sidebar */
-    section[data-testid="stSidebar"] {
-        background: rgba(10, 10, 15, 0.95) !important;
-    }
-    
-    /* Metrics */
-    div[data-testid="stMetric"] {
-        background: rgba(30, 41, 59, 0.6);
-        border-radius: 12px;
-        padding: 1rem;
-        border: 1px solid rgba(148, 163, 184, 0.1);
-    }
-    
-    /* Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 0.5rem;
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        background: transparent;
-        border: 1px solid rgba(148, 163, 184, 0.1);
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        color: #94a3b8;
-    }
-    
-    .stTabs [aria-selected="true"] {
-        background: rgba(99, 102, 241, 0.2);
-        border-color: #6366f1;
-        color: #a5b4fc;
-    }
-    
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-    
-    ::-webkit-scrollbar-track {
-        background: #12121a;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-        background: #334155;
-        border-radius: 4px;
-    }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+    font-family: 'Inter', sans-serif !important;
+    box-sizing: border-box;
+}
+
+html, body, .stApp {
+    background: #0a0a0f !important;
+    color: #f8fafc;
+}
+
+.main {
+    background: linear-gradient(135deg, #0a0a0f 0%, #0c0c14 50%, #0f0f1a 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+.main::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(139, 92, 246, 0.1), transparent),
+        radial-gradient(ellipse 50% 30% at 0% 100%, rgba(16, 185, 129, 0.08), transparent);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.stApp > div {
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.hero-section {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(16, 185, 129, 0.08) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    border-radius: 24px;
+    padding: 3rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #818cf8, #34d399, transparent);
+    background-size: 200% 100%;
+    animation: gradient-shift 3s ease infinite;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #34d399 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    color: #94a3b8;
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+
+.hero-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #34d399;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 9999px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.section-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid transparent;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, #818cf8, #34d399);
+    border-radius: 9999px;
+}
+
+.service-card {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #10b981);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+    background: rgba(49, 46, 129, 0.3);
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 0 40px rgba(99, 102, 241, 0.3);
+}
+
+.service-card:hover::before {
+    transform: scaleX(1);
+}
+
+.service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover .service-icon {
+    transform: scale(1.15) rotate(5deg);
+}
+
+.service-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+}
+
+.service-description {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.tech-tag {
+    display: inline-flex;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.1));
+    color: #a5b4fc;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0.25rem;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    transition: all 0.15s ease;
+}
+
+.tech-tag:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.2));
+    border-color: #818cf8;
+    transform: translateY(-2px);
+}
+
+.experience-card {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    border-left: 4px solid #6366f1;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 0 12px 12px 0;
+    transition: all 0.3s ease;
+}
+
+.experience-card:hover {
+    background: rgba(49, 46, 129, 0.3);
+    border-left-color: #10b981;
+    transform: translateX(8px);
+}
+
+.experience-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.experience-company {
+    color: #818cf8;
+    font-weight: 500;
+}
+
+.experience-period {
+    color: #64748b;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    font-family: monospace;
+}
+
+.experience-description {
+    color: #94a3b8;
+    line-height: 1.7;
+}
+
+.industry-badge {
+    display: inline-flex;
+    background: rgba(99, 102, 241, 0.1);
+    color: #a5b4fc;
+    padding: 0.25rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-right: 0.5rem;
+    border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.prose-card {
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.prose-card h4 {
+    color: #f8fafc;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.prose-card p {
+    color: #94a3b8;
+    line-height: 1.8;
+}
+
+.prose-card strong {
+    color: #a5b4fc;
+}
+
+.contact-card {
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.contact-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #10b981, #f59e0b);
+}
+
+.contact-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+.contact-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.contact-label {
+    color: #f8fafc;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.contact-value {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.footer {
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.footer-text {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.footer-brand {
+    color: #818cf8;
+    font-weight: 600;
+}
+
+section[data-testid="stSidebar"] {
+    background: rgba(10, 10, 15, 0.95) !important;
+}
+
+div[data-testid="stMetric"] {
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0.5rem;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: transparent;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    color: #94a3b8;
+}
+
+.stTabs [aria-selected="true"] {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: #6366f1;
+    color: #a5b4fc;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #12121a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
 </style>
 """
-    
+
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
@@ -443,12 +428,12 @@ def render_about():
         Especialista en desarrollar arquitecturas de próxima generación que impulsan la transformación digital 
         en sectores críticos como **Fintech**, **Salud** y **Movilidad**.
         
-        Mi enfoque combina profundidad técnica con visión estratégica de negocio, delivers soluciones 
+        Mi enfoque combina profundidad técnica con visión estratégica de negocio, deliverando soluciones 
         que generan impacto medible y sostenible.
         """)
 
     with col2:
-        st.markdown("### 📊 Quick Stats")
+        st.markdown("### Quick Stats")
         col_a, col_b = st.columns(2)
         with col_a:
             st.metric("Years", "15+")
@@ -733,7 +718,7 @@ def render_contact():
 
 def main():
     with st.sidebar:
-        st.markdown("## 🧭 Navigation")
+        st.markdown("## Navigation")
 
         menu = st.radio(
             "Go to:",
@@ -753,9 +738,9 @@ def main():
 
         st.markdown("---")
         st.markdown("### Industries")
-        st.markdown("- 🏦 Fintech")
-        st.markdown("- 🏥 Healthcare")
-        st.markdown("- 🚗 Mobility")
+        st.markdown("- Fintech")
+        st.markdown("- Healthcare")
+        st.markdown("- Mobility")
 
     if menu == "Home":
         render_header()
