@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime
 
 st.set_page_config(
-    page_title="Miguel Torres | AI & Quantum Computing Expert",
+    page_title="Robinson Moncada | Software Engineer AI/Blockchain",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -741,8 +741,8 @@ def render_header():
     st.markdown(
         """
     <div class="hero-section">
-        <h1 class="hero-title">Miguel Torres</h1>
-        <p class="hero-subtitle">🤖 AI & Quantum Computing Expert | 15 Years of Excellence</p>
+        <h1 class="hero-title">Robinson Moncada</h1>
+        <p class="hero-subtitle">⚡ Software Engineer AI/Blockchain | 15 Years of Excellence</p>
         <span class="hero-location">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -1048,8 +1048,8 @@ def render_contact():
         """
     <div class="footer">
         <p class="footer-text">
-            © 2026 <span class="footer-brand">Miguel Torres</span>. All rights reserved.<br>
-            Building the future with AI & Quantum Computing
+            © 2026 <span class="footer-brand">Robinson Moncada</span>. All rights reserved.<br>
+            Building the future with AI & Blockchain
         </p>
     </div>
     """,

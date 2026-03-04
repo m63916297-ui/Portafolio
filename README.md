@@ -1,4 +1,4 @@
-# 🤖 Miguel Torres - AI & Quantum Computing Portfolio
+# ⚡ Robinson Moncada - Software Engineer AI/Blockchain Portfolio
 
 Professional portfolio built with Streamlit showcasing expertise in Machine Learning, Deep Learning, AI Generativa, MCP Servers, Agentic Engineering, Computación Cuántica, DevOps, and Blockchain.
 
@@ -32,8 +32,8 @@ portafolio/
 ├── app.py                 # Main Streamlit application
 ├── requirements.txt       # Python dependencies
 ├── .streamlit/
-│   └── config.toml        # Streamlit configuration
-└── README.md              # This file
+│   └── config.toml      # Streamlit configuration
+└── README.md            # This file
 ```
 
 ## 🛠️ Tech Stack
@@ -66,4 +66,4 @@ To customize this portfolio:
 
 ## 📝 License
 
-© 2026 Miguel Torres. All rights reserved.
+© 2026 Robinson Moncada. All rights reserved.
